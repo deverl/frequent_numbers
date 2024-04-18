@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 typedef struct pair_t
@@ -182,6 +183,9 @@ void print_intvec(const char *title, const intvec_t *piv)
     printf("]\n");
 }
 
+
+
+
 intvec_t get_most_frequent_numbers(int *nums, int n, int k)
 {
     intvec_t result;
@@ -212,6 +216,28 @@ intvec_t get_most_frequent_numbers(int *nums, int n, int k)
 }
 
 
+
+void run_random_inputs_test(int num_data_points, int max_value, int num_most_frequent)
+{
+    int *nums = malloc(num_data_points * sizeof(int));
+    int k = num_most_frequent;
+    intvec_t r;
+    srand(time(0));
+    for(int i = 0; i < num_data_points; i++)
+    {
+        nums[i] = rand() % max_value;
+    }
+    r = get_most_frequent_numbers(nums, num_data_points, k);
+    print_int_array("  nums: ", nums, num_data_points);
+    printf("     k: %d\n", k);
+    print_intvec("result: ", &r);
+    free(nums);
+    free(r.p);
+}
+
+
+
+
 int main(int argc, char *argv[])
 {
     intvec_t r;
@@ -226,6 +252,19 @@ int main(int argc, char *argv[])
     print_intvec("result: ", &r);
     
     free(r.p);
+
+    if (argc > 3)
+    {
+        int num_data_points = atoi(argv[1]);
+        int max_value = atoi(argv[2]);
+        int num_most_frequent = atoi(argv[3]);
+        run_random_inputs_test(num_data_points, max_value, num_most_frequent);
+    }
     
     return 0;
 }
+
+
+
+
+
