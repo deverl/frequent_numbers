@@ -164,22 +164,22 @@ void add_int_to_intvec(intvec_t *pv, int value)
 
 void print_int_array(const char *title, int *nums, int n)
 {
-    printf("%s", title);
+    printf("%s[ ", title);
     for(int i = 0; i < n; i++) 
     {
         printf("%d ", nums[i]);
     }
-    printf("\n");
+    printf("]\n");
 }
 
 void print_intvec(const char *title, const intvec_t *piv)
 {
-    printf("%s", title);
+    printf("%s[ ", title);
     for(int i = 0; i < piv->len; i++)
     {
         printf("%d ", piv->p[i]);
     }
-    printf("\n");
+    printf("]\n");
 }
 
 intvec_t get_most_frequent_numbers(int *nums, int n, int k)
