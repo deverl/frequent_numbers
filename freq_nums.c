@@ -340,6 +340,7 @@ intvec_t * get_most_frequent_numbers(int *nums, int n, int k)
     
     result = new_intvec(k, k);
     
+    // Copy the top k most frequent numbers from the pair vector into an int vector.
     for(int i = 0; i < k; i++)
     {
         result->p[i] = pv->t[i].first;
