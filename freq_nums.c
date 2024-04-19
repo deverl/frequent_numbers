@@ -57,6 +57,11 @@ void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
         exit(1);
     }
     
+    if(!pv->t) {
+        fprintf( stderr, "ERROR: pairvec data pointer is null in add_pair_to_pairvec\n");
+        exit(1);
+    }
+    
     // Sanity check.
     if(pv->len > pv->size)
     {
@@ -92,7 +97,12 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
         fprintf(stderr, "ERROR: invalid pairvec_t pointer passed to increment_value_in_pairvec_by_key");
         exit(1);
     }
-    
+
+    if(!pv->t) {
+        fprintf( stderr, "ERROR: pairvec data pointer is null in increment_value_in_pairvec_by_key\n");
+        exit(1);
+    }
+
     for(int i = 0; i < pv->len; i++)
     {
         if (pv->t[i].first == key)
@@ -157,6 +167,11 @@ void add_int_to_intvec(intvec_t *pv, int value)
         exit(1);
     }
     
+    if(!pv->p) {
+        fprintf( stderr, "ERROR: intvec data pointer is null in increment_value_in_pairvec_by_key\n");
+        exit(1);
+    }
+    
     // Sanity check.
     if(pv->len > pv->size)
     {
@@ -185,6 +200,18 @@ void add_int_to_intvec(intvec_t *pv, int value)
 
 void print_int_array(const char *title, int *nums, int n)
 {
+    if(!title)
+    {
+        fprintf(stderr, "ERROR: Null title passed to print_int_array\n");
+        exit(1);
+    }
+
+    if(!nums) 
+    {
+        fprintf(stderr, "ERROR: Null nums passed to print_int_array\n");
+        exit(1);
+    }
+
     printf("%s[ ", title);
     for(int i = 0; i < n; i++) 
     {
@@ -195,6 +222,18 @@ void print_int_array(const char *title, int *nums, int n)
 
 void print_intvec(const char *title, const intvec_t *piv)
 {
+    if(!title) 
+    {
+        fprintf(stderr, "ERROR: Null title passed to print_intvec\n");
+        exit(1);
+    }
+    
+    if(!piv)
+    {
+        fprintf(stderr, "ERROR: Null intvec_t pointer passed to print_int_array\n");
+        exit(1);
+    }
+    
     printf("%s[ ", title);
     for(int i = 0; i < piv->len; i++)
     {
