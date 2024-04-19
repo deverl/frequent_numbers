@@ -16,6 +16,7 @@ typedef struct pairvec_t
     pair_t  *t;
     int     len;
     int     size;
+    int     block;
 } pairvec_t;
 
 
@@ -24,10 +25,11 @@ typedef struct intvec_t
     int  *p;
     int  len;
     int  size;
+    int  block;
 } intvec_t;
 
 
-void init_pairvec(pairvec_t *pv, int initialSize)
+void init_pairvec(pairvec_t *pv, int initialSize, int block)
 {
     if(pv)
     {
@@ -39,6 +41,7 @@ void init_pairvec(pairvec_t *pv, int initialSize)
         }
         pv->len = 0;
         pv->size = initialSize;
+        pv->block = block;
     }
     else {
         fprintf(stderr, "ERROR: invalid pairvec_t pointer passed to init_pairvec");
@@ -53,16 +56,24 @@ void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
         fprintf(stderr, "ERROR: invalid pairvec_t pointer passed to add_pair_to_pairvec");
         exit(1);
     }
-
-    if(pv->len == (pv->size - 1))
+    
+    // Sanity check.
+    if(pv->len > pv->size)
     {
-        // Add room for 100 elements.
-        pair_t *p = malloc( (pv->size + 100) * sizeof(pair_t));
+        fprintf(stderr, "ERROR: len > size in add_pair_to_pairvec\n");
+        exit(1);
+    }
+
+    if(pv->len == pv->size)
+    {
+        // Add room for quanta element(s).
+        pair_t *p = malloc( (pv->size + pv->block) * sizeof(pair_t));
         if(!p)
         {
             fprintf(stderr, "ERROR: Insufficient memory.");
             exit(1);
         }
+        pv->size += pv->block;
         memcpy(p, pv->t, (pv->len * sizeof(pair_t)));
         free(pv->t);
         pv->t = p;
@@ -118,7 +129,7 @@ void sort_pairvec_by_value(pairvec_t *pv)
 }
 
 
-void init_intvec(intvec_t *pv, int initialSize)
+void init_intvec(intvec_t *pv, int initialSize, int block)
 {
     if(pv)
     {
@@ -130,6 +141,7 @@ void init_intvec(intvec_t *pv, int initialSize)
         }
         pv->len = 0;
         pv->size = initialSize;
+        pv->block = block;
     }
     else {
         fprintf(stderr, "ERROR: invalid intvec_t pointer passed to init_intvec");
@@ -144,16 +156,24 @@ void add_int_to_intvec(intvec_t *pv, int value)
         fprintf(stderr, "ERROR: invalid intvec_t pointer passed to add_int_to_intvec");
         exit(1);
     }
-
-    if(pv->len == (pv->size - 1))
+    
+    // Sanity check.
+    if(pv->len > pv->size)
     {
-        // Add room for 100 ints.
-        int *p = malloc( (pv->size + 100) * sizeof(int));
+        fprintf(stderr, "ERROR: len > size in add_int_to_intvec\n");
+        exit(1);
+    }
+
+    if(pv->len == pv->size)
+    {
+        // Add room for quanta int(s).
+        int *p = malloc( (pv->size + pv->block) * sizeof(int));
         if(!p)
         {
             fprintf(stderr, "ERROR: Insufficient memory.");
             exit(1);
         }
+        pv->size += pv->block;
         memcpy(p, pv->p, (pv->len * sizeof(int)));
         free(pv->p);
         pv->p = p;
@@ -191,7 +211,9 @@ intvec_t get_most_frequent_numbers(int *nums, int n, int k)
     intvec_t result;
     pairvec_t pv;
     
-    init_pairvec(&pv, n);
+    const int size = n / 2 > 0 ? n / 2 : 20;
+    
+    init_pairvec(&pv, size, size);
     
     // Record the number of occurrences of each value in the pairvec.
     for(int i = 0; i < n; i++)
@@ -202,7 +224,7 @@ intvec_t get_most_frequent_numbers(int *nums, int n, int k)
     // Sort the pairvec by number of occurrences.
     sort_pairvec_by_value(&pv);
     
-    init_intvec(&result, k);
+    init_intvec(&result, k, k);
     
     for(int i = 0; i < k; i++)
     {
