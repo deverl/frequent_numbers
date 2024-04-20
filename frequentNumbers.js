@@ -1,4 +1,4 @@
-function printMostFrequentNumbers(nums, k) {
+function getMostFrequentNumbers(nums, k) {
     let mp = new Map();
 
     // Put count of all the distinct elements in Map with element as the key & count as the value.
@@ -17,21 +17,54 @@ function printMostFrequentNumbers(nums, k) {
     // Sort the list
     list.sort((o1, o2) => o2[1] - o1[1])
 
-    let s = `The ${k} numbers with the highest frequency are:`;
+    let r = [];
 
     for (let i = 0; i < k; i++) {
-        if (i > 0) {
-            s += ",";
-        }
-        s += " " + list[i][0];;
+        r.push(list[i][0])
     }
 
+    return r;
+}
+
+
+function printArray(prefix, arr) {
+    let s = prefix + " [ ";
+    for (i = 0; i < arr.length; i++) {
+        s += arr[i] + " ";
+    }
+    s += "]";
     console.log(s);
 }
 
-// Test data
-let nums = [9,3,9,3,9,3,7,9,7,2,9,4,4,9,4,4,4,9,9,8,8,6,6,1,1,1,1,1,1];
-let k = 4;
 
-printMostFrequentNumbers(nums, k);
+function runTest(nums, k) {
+    let r = getMostFrequentNumbers(nums, k);
+    console.log("")
+    printArray("  nums:", nums);
+    console.log("     k:", k);
+    printArray("result:", r)
+}
+
+
+
+function runAllTests() {
+    // Test data
+
+    let nums = [1,1,1,2,2,3];
+    let k = 2;
+    runTest(nums, k);
+
+    nums = [1,4,2,5,7,5,4,4,5,5,5,2,7,2,5,4];
+    k = 3;
+    runTest(nums, k);
+
+    nums = [9,3,9,3,9,3,7,9,7,2,9,4,4,9,4,4,4,9,9,8,8,6,6,1,1,1,1,1,1];
+    k = 4;
+    runTest(nums, k);
+
+    console.log("")
+}
+
+
+runAllTests();
 
