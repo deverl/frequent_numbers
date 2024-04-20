@@ -50,7 +50,7 @@ runlua:
 
 
 runpython:
-	python frequentNumbers.py
+	python3 frequentNumbers.py
 
 runpy: runpython
 
