@@ -1,7 +1,7 @@
 
 all : freqc freqcpp freqgo FrequentNumbers.jar
 
-.PHONY : clean runlua runpython runjs runphp rungo
+.PHONY : clean runlua runpython runpy runjs runphp rungo
 
 
 freqc : freq_nums.c makefile
@@ -47,6 +47,9 @@ runlua:
 
 runpython:
 	python frequentNumbers.py
+
+
+runpy: runpython
 
 
 runjs:
