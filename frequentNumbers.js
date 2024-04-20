@@ -27,7 +27,6 @@ function printMostFrequentNumbers(nums, k) {
     }
 
     console.log(s);
-    document.write(s);
 }
 
 // Test data
