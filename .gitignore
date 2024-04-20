@@ -7,3 +7,5 @@ freq_nums
 *.js.tmp.html
 freqc
 freqcpp
+freqgo
+*.jar
