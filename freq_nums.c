@@ -32,6 +32,20 @@ typedef struct intvec_t
 } intvec_t;
 
 
+// Helper to get the value of an environment variable as an integer.
+int get_env_var_as_int(const char *name, int default_value)
+{
+    char *p = getenv(name);
+    if(p) {
+        return atoi(p);
+    }
+    else
+    {
+        return default_value;
+    }
+}
+
+
 // Allocate and initialize a ndw pair_vec_t
 pairvec_t * new_pairvec(int initialSize, int block)
 {
@@ -41,14 +55,14 @@ pairvec_t * new_pairvec(int initialSize, int block)
     
     if (!pv)
     {
-        fprintf(stderr, "ERROR: Insufficient memory in new_pairvec\n");
+        fprintf(stderr, "ERROR: Insufficient memory for pairvect_t in new_pairvec\n");
         exit(1);
     }
 
     pv->t = malloc(initialSize * sizeof(pair_t));
     if(!pv->t)
     {
-        fprintf(stderr, "ERROR: Insufficient memory.");
+        fprintf(stderr, "ERROR: Insufficient memory for data in new_pairvec.");
         exit(1);
     }
     pv->len = 0;
@@ -102,7 +116,12 @@ void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
 
     if(pv->len == pv->size)
     {
-        // Add room for quanta element(s).
+        const int verbosity = get_env_var_as_int("FREQ_NUMS_VERBOSITY", 0);
+        if (verbosity > 1)
+        {
+            printf("Allocating %d more elements in add_pair_to_pairvec\n", pv->block);
+        }
+        // Allocate room for pv->block more elements in the array.
         pair_t *p = malloc( (pv->size + pv->block) * sizeof(pair_t));
         if(!p)
         {
@@ -150,6 +169,7 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
     return 1;
 }
 
+
 // Comparison function for the qsort call in sort_pairvec_by_value function.
 int compare(const void *a, const void *b)
 {
@@ -168,6 +188,12 @@ void sort_pairvec_by_value(pairvec_t *pv)
         fprintf(stderr, "ERROR: invalid pairvec_t pointer passed to sort_pairvec_by_value");
         exit(1);
     }
+
+    if (!pv->t)
+    {
+        fprintf(stderr, "ERROR: invalid data pointer in pairvec passed to sort_pairvec_by_value");
+        exit(1);
+    }
     
     qsort(pv->t, pv->len, sizeof(pair_t), compare);
 }
@@ -180,14 +206,14 @@ intvec_t * new_intvec(int initialSize, int block)
     
     if(!pv)
     {
-        fprintf(stderr, "ERRRO: Insufficient memory in new_intvec\n");
+        fprintf(stderr, "ERROR: Insufficient memory for new intvec_t in new_intvec\n");
         exit(1);
     }
     
     pv->p = malloc(initialSize * sizeof(int));
     if(!pv->p)
     {
-        fprintf(stderr, "ERROR: Insufficient memory.");
+        fprintf(stderr, "ERROR: Insufficient memory for data in new_intvec\n.");
         exit(1);
     }
     pv->len = 0;
@@ -221,7 +247,7 @@ void add_int_to_intvec(intvec_t *pv, int value)
 
     if(pv->len == pv->size)
     {
-        // Add room for quanta int(s).
+        // Allocate room for pv->block more elements.
         int *p = malloc( (pv->size + pv->block) * sizeof(int));
         if(!p)
         {
@@ -243,17 +269,17 @@ void add_int_to_intvec(intvec_t *pv, int value)
 void free_intvec(intvec_t **ppv)
 {
     if (!ppv)
-        {
-            fprintf(stderr, "ERROR: Invalid pointer passed to free_intvec\n");
-            exit(1);
-        }
+    {
+        fprintf(stderr, "ERROR: Invalid pointer passed to free_intvec\n");
+        exit(1);
+    }
     
     intvec_t *pv = *ppv;
     
     if(pv->p)
-        {
-            free(pv->p);
-        }
+    {
+        free(pv->p);
+    }
     
     free(*ppv);
 }
@@ -274,7 +300,7 @@ void print_int_array(const char *title, int *nums, int n)
         exit(1);
     }
     
-    const int no_truncate_arrays = getenv("NO_TRUNCATE_ARRAYS") != 0 ? 1 : 0;
+    const int no_truncate_arrays = get_env_var_as_int("NO_TRUNCATE_ARRAYS", 0);
 
     printf("%s[ ", title);
     for(int i = 0; i < n; i++) 
@@ -305,7 +331,7 @@ void print_intvec(const char *title, const intvec_t *piv)
         exit(1);
     }
 
-    const int no_truncate_arrays = getenv("NO_TRUNCATE_ARRAYS") != 0 ? 1 : 0;
+    const int no_truncate_arrays = get_env_var_as_int("NO_TRUNCATE_ARRAYS", 0);
     
     printf("%s[ ", title);
     for(int i = 0; i < piv->len; i++)
@@ -324,9 +350,10 @@ void print_intvec(const char *title, const intvec_t *piv)
 // This is where we actually do the work of find the most frequent numbers.
 intvec_t * get_most_frequent_numbers(int *nums, int n, int k)
 {
-    const int size = n / 2 > 0 ? n / 2 : 20;
+    const int size = n / 4 > 0 ? n / 4 : 25;
+    const int block = 100;
     intvec_t *result = 0;
-    pairvec_t *pv = new_pairvec(size, size);
+    pairvec_t *pv = new_pairvec(size, block);
     
     // Record the number of occurrences of each value in the pairvec.
     for(int i = 0; i < n; i++)
