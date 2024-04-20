@@ -2,7 +2,7 @@
 
 ## Overview
 
-The programs in this project are possible solutions to a problem where you are given an integer array 'nums' and integer 'k' and you are to return the k most frequent elements from nums.
+The programs in this project are possible solutions to a problem where you are given an integer array `nums` and integer `k` and you are to return the `k` most frequent elements from `nums`.
 
 The results may be returned in any order.
 
