@@ -3,6 +3,7 @@ all : freqc freqcpp FrequentNumbers.class
 
 .PHONY : clean runlua runpython runjs runphp
 
+
 freqc : freq_nums.c makefile
 	gcc -Wall -pedantic -O3 -o freqc freq_nums.c
 	strip freqc
@@ -40,9 +41,10 @@ runpython:
 runjs:
 	node frequentNumbers.js
 
+
 runphp:
 	php frequentNumbers.php
-	
+
 
 clean:
 	rm -f freqc freqcpp *.class *.tmp.html a.out
