@@ -50,15 +50,15 @@ print("     k = ", k)
 print("result = ", ret)
 print()
 
-#nums = [1,2,5,7,4,4,5,5,2,2]
-#k = 3
-#
-#ret = getMostFrequentNumbers(nums, k)
-#print(" input = ", nums)
-#print("     k = ", k)
-#print("result = ", ret)
-#print()
-#
+nums = [1,4,2,5,7,5,4,4,5,5,5,2,7,2,5,4]
+k = 3
+
+ret = getMostFrequentNumbers(nums, k)
+print(" input = ", nums)
+print("     k = ", k)
+print("result = ", ret)
+print()
+
 #nums = getTestIntList(10, 40)
 #k = 5
 #

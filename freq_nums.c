@@ -410,6 +410,7 @@ int main(int argc, char *argv[])
     
     r = get_most_frequent_numbers(nums, n, k);
     
+    printf("\n");
     print_int_array("  nums: ", nums, n);
     printf("     k: %d\n", k);
     print_intvec("result: ", r);
@@ -423,6 +424,8 @@ int main(int argc, char *argv[])
         int num_most_frequent = atoi(argv[3]);
         run_random_inputs_test(num_data_points, max_value, num_most_frequent);
     }
+
+    printf("\n");
     
     return 0;
 }
