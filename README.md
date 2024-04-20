@@ -8,7 +8,8 @@ The results may be returned in any order.
 
 See [problem.txt](https://github.com/deverl/frequent_numbers/blob/main/problem.txt) for some sample data and the expected results.
 
-There are probably many ways this problem could be solved. These are just some examples.
+### Notes
+1. There are probably many ways this problem could be solved. These are just some examples.
 
 ## Running
 
