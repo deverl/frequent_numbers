@@ -21,7 +21,7 @@ You can run any of the programs with `make RUNTARGET` where `RUNTARGET` is one o
 - runjava
 - runlua
 - runpython (or runpy)
-- runjs
+- runjavascript (or runjs)
 - runphp
 
 ## Cleanup
