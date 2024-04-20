@@ -10,9 +10,23 @@ See [problem.txt](https://github.com/deverl/frequent_numbers/blob/main/problem.t
 
 There are probably many ways this problem could be solved. These are just some examples.
 
+## Running
+
+There is a makefile that can run each of the programs, building executables if required (go, c, cpp, java).
+
+You can use `make RUNTARGET` where `RUNTARGET` is one of:
+- runc
+- runcpp
+- rungo
+- runjava
+- runlua
+- runpython
+- runjs
+- runphp
+
 ## Caveats
 
 None of these solutions take special care to handle these situations:
 - Where there are multiple input elements with the same frequency. There is no guarantee on the output in this case.
-- Where there are fewer values in nums than requested by the value of k
+- Where there are fewer values in `nums` than requested by the value of `k`
 
