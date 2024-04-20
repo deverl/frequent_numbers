@@ -20,7 +20,7 @@ You can run any of the programs with `make RUNTARGET` where `RUNTARGET` is one o
 - rungo
 - runjava
 - runlua
-- runpython
+- runpython (or runpy)
 - runjs
 - runphp
 
