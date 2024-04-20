@@ -24,6 +24,8 @@ You can run any of the programs with `make RUNTARGET` where `RUNTARGET` is one o
 - runjs
 - runphp
 
+## Cleanup
+
 There is also a make target to clean up all of the executables and intermediaries. Use `make clean` to cleanup.
 
 ## Caveats
