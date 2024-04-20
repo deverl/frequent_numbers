@@ -25,6 +25,10 @@ FrequentNumbers.jar: FrequentNumbers.java makefile
 	rm -f MainClass.txt *.class
 
 
+runall: runc runcpp rungo runjava runjs runlua runphp runpy
+
+
+
 runc: freqc makefile
 	./freqc
 
