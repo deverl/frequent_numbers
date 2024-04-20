@@ -18,31 +18,35 @@ func (t ByValue) Len() int           { return len(t) }
 func (t ByValue) Less(i, j int) bool { return t[i].v > t[j].v }
 func (t ByValue) Swap(i, j int)      { t[i], t[j] = t[j], t[i] }
 
-func main() {
-	nums := []int{9,3,9,3,9,3,7,9,7,2,9,4,4,9,4,4,4,9,9,8,8,6,6,1,1,1,1,1,1}
-	k := 4
+func runTest(nums []int, k int) {
 	result := getMostFrequentNumbers(nums, k)
 	fmt.Println("")
 	fmt.Println("  nums =", nums)
 	fmt.Println("     k =", k)
 	fmt.Println("result =", result)
+}
 
-	nums = generateRandomInputValues(20, 30)
+func main() {
+	nums := []int{1, 1, 1, 2, 2, 3}
+	k := 2
+
+	runTest(nums, k)
+
+	nums = []int{1, 4, 2, 5, 7, 5, 4, 4, 5, 5, 5, 2, 7, 2, 5, 4}
+	k = 3
+
+	runTest(nums, k)
+
+	nums = []int{9, 3, 9, 3, 9, 3, 7, 9, 7, 2, 9, 4, 4, 9, 4, 4, 4, 9, 9, 8, 8, 6, 6, 1, 1, 1, 1, 1, 1}
 	k = 4
-	result = getMostFrequentNumbers(nums, k)
-	fmt.Println("")
-	fmt.Println("  nums =", nums)
-	fmt.Println("     k =", k)
-	fmt.Println("result =", result)
+
+	runTest(nums, k)
 
 	nums = generateRandomInputValues(10, 100)
 	k = 8
-	result = getMostFrequentNumbers(nums, k)
-	fmt.Println("")
-	fmt.Println("  nums =", nums)
-	fmt.Println("     k =", k)
-	fmt.Println("result =", result)
-	
+
+	runTest(nums, k)
+
 	fmt.Println("")
 }
 

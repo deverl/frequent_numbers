@@ -1,7 +1,7 @@
 
-all : freqc freqcpp FrequentNumbers.class
+all : freqc freqcpp freqgo FrequentNumbers.jar
 
-.PHONY : clean runlua runpython runjs runphp
+.PHONY : clean runlua runpython runjs runphp rungo
 
 
 freqc : freq_nums.c makefile
@@ -14,8 +14,15 @@ freqcpp : frequentNumbers.cpp makefile
 	strip freqcpp
 
 
-FrequentNumbers.class: FrequentNumbers.java makefile
+freqgo: go/frequentNumbers.go makefile
+	cd go ; go build -o freqgo ; mv freqgo ..
+
+
+FrequentNumbers.jar: FrequentNumbers.java makefile
 	javac FrequentNumbers.java
+	echo "Main-Class: FrequentNumbers" > MainClass.txt
+	jar cmfv MainClass.txt FrequentNumbers.jar *.class
+	rm -f MainClass.txt *.class
 
 
 runc: freqc makefile
@@ -26,8 +33,12 @@ runcpp: freqcpp makefile
 	./freqcpp
 
 
-runjava: FrequentNumbers.class
-	java -cp . FrequentNumbers
+rungo: freqgo makefile
+	./freqgo
+
+
+runjava: FrequentNumbers.jar
+	java -jar FrequentNumbers.jar
 
 
 runlua:
@@ -47,4 +58,4 @@ runphp:
 
 
 clean:
-	rm -f freqc freqcpp *.class *.tmp.html a.out
+	rm -f freqc freqcpp freqgo *.jar MainClass.txt *.class *.tmp.html a.out
