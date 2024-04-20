@@ -328,7 +328,6 @@ intvec_t * get_most_frequent_numbers(int *nums, int n, int k)
     intvec_t *result = 0;
     pairvec_t *pv = new_pairvec(size, size);
     
-    
     // Record the number of occurrences of each value in the pairvec.
     for(int i = 0; i < n; i++)
     {
@@ -347,6 +346,7 @@ intvec_t * get_most_frequent_numbers(int *nums, int n, int k)
         result->len++;
     }
     
+    // We're done with the pair vector, so we can free it now.
     free_pairvec(&pv);
     
     return result;

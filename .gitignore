@@ -4,3 +4,4 @@
 a.out
 *.dSYM/
 freq_nums
+*.js.tmp.html
