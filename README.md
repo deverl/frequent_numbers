@@ -14,7 +14,7 @@ There are probably many ways this problem could be solved. These are just some e
 
 There is a makefile that can run each of the programs, building executables if required (go, c, cpp, java).
 
-You can use `make RUNTARGET` where `RUNTARGET` is one of:
+You can run any of the programs with `make RUNTARGET` where `RUNTARGET` is one of:
 - runc
 - runcpp
 - rungo
