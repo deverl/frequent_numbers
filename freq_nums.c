@@ -36,7 +36,8 @@ typedef struct intvec_t
 int get_env_var_as_int(const char *name, int default_value)
 {
     char *p = getenv(name);
-    if(p) {
+    if(p)
+    {
         return atoi(p);
     }
     else

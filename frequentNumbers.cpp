@@ -6,13 +6,28 @@
 using namespace std;
 
 
+// Helper to get the value of an environment variable as an integer.
+int get_env_var_as_int(const char *name, int default_value)
+{
+    char *p = getenv(name);
+    if(p)
+    {
+        return atoi(p);
+    }
+    else
+    {
+        return default_value;
+    }
+}
+
+
 // Comparison function to sort a vector of pairs by the second value in the pair.
 bool compare(pair<int, int> p1, pair<int, int> p2)
 {
     return p1.second > p2.second;
 }
 
-vector<int> getMostFrequentNumbers(const vector<int>& nums, int k)
+vector<int> get_most_frequent_numbers(const vector<int>& nums, int k)
 {
     // Build up a map where the keys are each unique value from the input 'nums'
     // and the value is the number of times it appears in the input array.
@@ -41,14 +56,21 @@ vector<int> getMostFrequentNumbers(const vector<int>& nums, int k)
 
 void print_vec(const string s, const vector<int>& v)
 {
-    cout << s;
+    const int no_truncate_arrays(get_env_var_as_int("NO_TRUNCATE_ARRAYS", 0));
+    cout << s << "[ ";
     
-    for (int n :v)
+    for (int i = 0; i < v.size(); i++)
     {
-        cout << n << " ";
+        if(!no_truncate_arrays && i >= 30)
+        {
+            cout << "... ";
+            break;
+            
+        }
+        cout << v[i] << " ";
     }
     
-    cout << endl;
+    cout << "]" << endl;
 }
 
 
@@ -56,13 +78,31 @@ void run_test(const vector<int>& nums, int k)
 {
     vector<int> v;
 
-    v = getMostFrequentNumbers(nums, k);
+    v = get_most_frequent_numbers(nums, k);
     
     cout << endl;
     print_vec("  nums: ", nums);
     cout << "     k: " << k << endl;
     print_vec("result: ", v);
 }
+
+
+
+// Runs a test on get_most_frequent_numbers using a vector of random integers.
+void run_random_inputs_test(int num_data_points, int max_value, int num_most_frequent)
+{
+    vector<int> nums;
+    
+    srand(time(0));
+    for(int i = 0; i < num_data_points; i++)
+    {
+        int n = rand() % max_value;
+        nums.push_back(n);
+    }
+
+    run_test(nums, num_most_frequent);
+}
+
 
 
 int main(int argc, char *argv[])
@@ -80,6 +120,15 @@ int main(int argc, char *argv[])
     int k3(4);
 
     run_test(nums3, k3);    
+
+    if (argc > 3)
+    {
+        int num_data_points = atoi(argv[1]);
+        int max_value = atoi(argv[2]);
+        int num_most_frequent = atoi(argv[3]);
+        run_random_inputs_test(num_data_points, max_value, num_most_frequent);
+    }
+
 
     cout << endl;
 
