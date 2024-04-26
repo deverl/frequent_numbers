@@ -59,7 +59,7 @@ void print_vec(const string s, const vector<int>& v)
     const int no_truncate_arrays(get_env_var_as_int("NO_TRUNCATE_ARRAYS", 0));
     cout << s << "[ ";
     
-    for (int i = 0; i < v.size(); i++)
+    for (vector<int>::size_type i = 0; i < v.size(); i++)
     {
         if(!no_truncate_arrays && i >= 30)
         {
