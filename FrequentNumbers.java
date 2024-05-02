@@ -35,18 +35,26 @@ public class FrequentNumbers {
     static void printArray(String prefix, int[] nums) {
         System.out.print(prefix + " [ ");
         for (int i = 0; i < nums.length; i++) {
-            System.out.print(nums[i] + " ");
+            if (i > 0) {
+                System.out.print(", ");
+            }
+            System.out.print(nums[i]);
         }
-        System.out.println("]");
+        System.out.println(" ]");
     }
 
 
     static void printList(String prefix, List<Integer> nums) {
         System.out.print(prefix + " [ ");
+        int i = 0;
         for (int n : nums) {
-            System.out.print(n + " ");
+            if (i > 0) {
+                System.out.print(", ");
+            }
+            System.out.print(n);
+            i++;
         }
-        System.out.println("]");
+        System.out.println(" ]");
     }
 
 

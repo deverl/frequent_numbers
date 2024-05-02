@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 
 import heapq
+import os
 import random
+import sys
 
 # Gets a list of the k most frequent values from nums
 def getMostFrequentNumbers(nums, k):
@@ -36,45 +38,57 @@ def getTestIntList(maxValue, count):
     for i in range(count):
         l.append(random.randint(0, maxValue - 1))
     return l
-    
-# Some test data
-
-nums = [9,3,9,3,9,3,7,9,7,2,9,4,4,9,4,4,4,9,9,8,8,6,6,1,1,1,1,1,1]
-k = 4
-
-print()
-
-ret = getMostFrequentNumbers(nums, k)
-print(" input = ", nums)
-print("     k = ", k)
-print("result = ", ret)
-print()
-
-nums = [1,4,2,5,7,5,4,4,5,5,5,2,7,2,5,4]
-k = 3
-
-ret = getMostFrequentNumbers(nums, k)
-print(" input = ", nums)
-print("     k = ", k)
-print("result = ", ret)
-print()
-
-#nums = getTestIntList(10, 40)
-#k = 5
-#
-#ret = getMostFrequentNumbers(nums, k)
-#print(" input = ", nums)
-#print("     k = ", k)
-#print("result = ", ret)
-#print()
 
 
-#nums = getTestIntList(100, 5000)
-#k = 20
-#
-#ret = getMostFrequentNumbers(nums, k)
-#print(" input = ", nums)
-#print("     k = ", k)
-#print("result = ", ret)
-#print()
 
+def printArray(title, arr):
+    numInts = 30
+    noTruncate = os.environ.get('NO_TRUNCATE_ARRAYS', "NA")
+    if noTruncate == "NA":
+        numInts = min(len(arr), numInts)
+    elif noTruncate == "1":
+        numInts = len(arr)
+    else:
+        numInts = min(len(arr), numInts)
+
+    print(title + "[ ", end="")
+    for i in range(len(arr)):
+        if (i > 0):
+            print(", ", end="")
+        print(arr[i], end="")
+    print(" ]")
+
+
+def runTest(nums, k):
+    print()
+    ret = getMostFrequentNumbers(nums, k)
+    print("     n =", len(nums))
+    printArray(" input = ", nums)
+    print("     k =", k)
+    printArray("result = ", ret)
+
+
+
+if (len(sys.argv) > 3):
+    # Run the program with user supplied inputs.
+    numDataPoints = int(sys.argv[1])
+    maxValue = int(sys.argv[2])
+    numMostFrequent = int(sys.argv[3])
+    nums = getTestIntList(maxValue, numDataPoints)
+    runTest(nums, numMostFrequent)
+else:
+    # Run the program with some canned data
+
+    nums = [1, 1, 1, 2, 2, 3]
+    k = 2
+    runTest(nums, k)
+
+    nums = [1,4,2,5,7,5,4,4,5,5,5,2,7,2,5,4]
+    k = 3
+    runTest(nums, k)
+
+    nums = [9,3,9,3,9,3,7,9,7,2,9,4,4,9,4,4,4,9,9,8,8,6,6,1,1,1,1,1,1]
+    k = 4
+    runTest(nums, k)
+
+print("")

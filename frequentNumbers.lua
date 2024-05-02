@@ -99,13 +99,26 @@ function getMostFrequentNumbers(a, k)
 end
 
 
+-- Helper to get the length of a table.
+function tableLength(t)
+  local count = 0
+  for _ in pairs(t) do count = count + 1 end
+  return count
+end
+
+
 -- Helper to print the values of an array, with a prefix.
 function printArrayValues(prefix, a)
     local s = prefix .. "[ "
+    local i = 0
     for k, v in ipairs(a) do
-        s = s .. tostring(v) .. " "
+        if (i > 0) then
+            s = s .. ", "
+        end
+        s = s .. tostring(v)
+        i = i + 1
     end
-    s = s .. "]"
+    s = s .. " ]"
     print(s)
 end
 
@@ -113,8 +126,11 @@ end
 function runTest(nums, k)
     local r = getMostFrequentNumbers(nums, k)
 
+    len = tableLength(nums)
+
     -- Print the results
     print("")
+    print("     n: " ..tostring(len))
     printArrayValues("  nums: ", nums)
     print("     k: " ..tostring(k))
     printArrayValues("result: ", r)

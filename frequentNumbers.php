@@ -23,11 +23,16 @@ function getFrequentNumbers(array $nums, int $k) : array {
 
 
 function printArray(string $prefix, array $a) {
+    $i = 0;
     echo "$prefix [ ";
     foreach ($a as $n) {
-        echo "$n ";
+        if ($i > 0) {
+            echo ", ";
+        }
+        echo "$n";
+        $i++;
     }
-    echo "]" . PHP_EOL;
+    echo " ]" . PHP_EOL;
 }
     
 
@@ -35,6 +40,7 @@ function runTest(array $nums, int $k) {
     $l = getFrequentNumbers($nums, $k);
 
     echo PHP_EOL;
+    echo "     n: " . count($nums) . PHP_EOL;
     printArray("  nums:", $nums);
     echo "     k: $k" . PHP_EOL;
     printArray("result:", $l);

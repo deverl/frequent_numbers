@@ -30,9 +30,12 @@ function getMostFrequentNumbers(nums, k) {
 function printArray(prefix, arr) {
     let s = prefix + " [ ";
     for (i = 0; i < arr.length; i++) {
-        s += arr[i] + " ";
+        if (i > 0) {
+            s += ", ";
+        }
+        s += arr[i];
     }
-    s += "]";
+    s += " ]";
     console.log(s);
 }
 
@@ -40,6 +43,7 @@ function printArray(prefix, arr) {
 function runTest(nums, k) {
     let r = getMostFrequentNumbers(nums, k);
     console.log("")
+    console.log("     n:", nums.length);
     printArray("  nums:", nums);
     console.log("     k:", k);
     printArray("result:", r)

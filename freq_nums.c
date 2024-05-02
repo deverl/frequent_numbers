@@ -335,14 +335,18 @@ void print_int_array(const char *title, int *nums, int n)
     printf("%s[ ", title);
     for(int i = 0; i < n; i++)
     {
+        if (i > 0)
+        {
+            printf(", ");
+        }
         if(!no_truncate_arrays && i >= 30)
         {
             printf("...");
             break;
         }
-        printf("%d ", nums[i]);
+        printf("%d", nums[i]);
     }
-    printf("]\n");
+    printf(" ]\n");
 }
 
 
@@ -366,14 +370,18 @@ void print_intvec(const char *title, const intvec_t *piv)
     printf("%s[ ", title);
     for(int i = 0; i < piv->len; i++)
     {
+        if(i > 0)
+        {
+            printf(", ");
+        }
         if(!no_truncate_arrays && i >= 30)
         {
             printf("...");
             break;
         }
-        printf("%d ", piv->p[i]);
+        printf("%d", piv->p[i]);
     }
-    printf("]\n");
+    printf(" ]\n");
 }
 
 
@@ -410,51 +418,72 @@ intvec_t * get_most_frequent_numbers(int *nums, int n, int k)
 }
 
 
-// Runs a test on get_most_frequent_numbers using an array of random integers.
-void run_random_inputs_test(int num_data_points, int max_value, int num_most_frequent)
-{
-    int *nums = malloc(num_data_points * sizeof(int));
-    int k = num_most_frequent;
-    intvec_t *r;
-    srand(time(0));
-    for(int i = 0; i < num_data_points; i++)
-    {
-        nums[i] = rand() % max_value;
-    }
-    r = get_most_frequent_numbers(nums, num_data_points, k);
-    print_int_array("  nums: ", nums, num_data_points);
-    printf("     k: %d\n", k);
-    print_intvec("result: ", r);
-    free(nums);
-    free_intvec(&r);
-}
-
-
-// Entry point.
-int main(int argc, char *argv[])
+void run_test(int *nums, int n, int k)
 {
     intvec_t *r;
-    int nums[] = {9,3,9,3,9,3,7,9,7,2,9,4,4,9,4,4,4,9,9,8,8,6,6,1,1,1,1,1,1};
-    int n = sizeof(nums) / sizeof(int);
-    int k = 4;
 
     r = get_most_frequent_numbers(nums, n, k);
 
+
     printf("\n");
+    printf("     n: %d\n", n);
     print_int_array("  nums: ", nums, n);
     printf("     k: %d\n", k);
     print_intvec("result: ", r);
 
     free_intvec(&r);
+}
 
+
+
+// Runs a test on get_most_frequent_numbers using an array of random integers.
+void run_random_inputs_test(int num_data_points, int max_value, int num_most_frequent)
+{
+    int *nums = malloc(num_data_points * sizeof(int));
+    srand(time(0));
+    for(int i = 0; i < num_data_points; i++)
+    {
+        nums[i] = rand() % max_value;
+    }
+    run_test(nums, num_data_points, num_most_frequent);
+    free(nums);
+}
+
+
+
+// Entry point.
+int main(int argc, char *argv[])
+{
     if (argc > 3)
     {
+        // Run the program with user supplied inputs.
+        // They specify the number of data points, the max integer value
+        // of a data point, and the number of results to return.
+
         int num_data_points = atoi(argv[1]);
         int max_value = atoi(argv[2]);
         int num_most_frequent = atoi(argv[3]);
         run_random_inputs_test(num_data_points, max_value, num_most_frequent);
     }
+    else {
+        // Run the program with some canned data.
 
+        int nums1[] = {1,1,1,2,2,3};
+        int n1 = sizeof(nums1) / sizeof(int);
+        int k1 = 2;
+        run_test(nums1, n1, k1);
+
+        int nums2[] = {1,4,2,5,7,5,4,4,5,5,5,2,7,2,5,4};
+        int n2 = sizeof(nums2) / sizeof(int);
+        int k2 = 3;
+        run_test(nums2, n2, k2);
+
+        int nums3[] = {9,3,9,3,9,3,7,9,7,2,9,4,4,9,4,4,4,9,9,8,8,6,6,1,1,1,1,1,1};
+        int n3 = sizeof(nums3) / sizeof(int);
+        int k3 = 4;
+        run_test(nums3, n3, k3);
+    }
+   
     printf("\n");
 
     return 0;
