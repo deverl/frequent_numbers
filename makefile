@@ -66,4 +66,6 @@ runphp:
 
 
 clean:
-	rm -f freqc freqcpp freqgo *.jar MainClass.txt *.class *.tmp.html a.out
+	rm -rf freq_nums freqc freqcpp freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM
+
+
