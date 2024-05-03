@@ -18,6 +18,11 @@ freqgo: go/frequentNumbers.go makefile
 	cd go ; go build -o freqgo ; mv freqgo ..
 
 
+freqjava : FrequentNumbers.jar
+	@echo '#!/bin/bash' > freqjava
+	@echo 'java -jar FrequentNumbers.jar "$@"' >> freqjava
+	@chmod a+x freqjava
+
 FrequentNumbers.jar: FrequentNumbers.java makefile
 	javac FrequentNumbers.java
 	echo "Main-Class: FrequentNumbers" > MainClass.txt
@@ -41,8 +46,8 @@ rungo: freqgo makefile
 	./freqgo
 
 
-runjava: FrequentNumbers.jar
-	java -jar FrequentNumbers.jar
+runjava: freqjava
+	./freqjava
 
 
 runlua:
@@ -66,6 +71,6 @@ runphp:
 
 
 clean:
-	rm -rf freq_nums freqc freqcpp freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM
+	rm -rf freq_nums freqc freqcpp freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava
 
 
