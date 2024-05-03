@@ -61,6 +61,7 @@ public class FrequentNumbers {
     static void runTest(int[] nums, int k) {
         List<Integer> l = getMostFrequentNumbers(nums, k);
         System.out.println("");
+        System.out.println("     n: " + nums.length);
         printArray("  nums:", nums);
         System.out.println("     k: " + k);
         printList("result:", l);
