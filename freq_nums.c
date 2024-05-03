@@ -112,7 +112,8 @@ void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
         exit(1);
     }
 
-    if(!pv->t) {
+    if(!pv->t) 
+    {
         fprintf( stderr, "ERROR: pairvec data pointer is null in add_pair_to_pairvec\n");
         exit(1);
     }
@@ -171,7 +172,8 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
         exit(1);
     }
 
-    if(!pv->t) {
+    if(!pv->t)
+    {
         fprintf( stderr, "ERROR: pairvec data pointer is null in increment_value_in_pairvec_by_key\n");
         exit(1);
     }
@@ -189,7 +191,8 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
         pf = 0;
     }
 
-    if (pf) {
+    if (pf)
+    {
         pf->second = pf->second + 1;
         return pf->second;
     }
@@ -263,7 +266,8 @@ void add_int_to_intvec(intvec_t *pv, int value)
         exit(1);
     }
 
-    if(!pv->p) {
+    if(!pv->p)
+    {
         fprintf( stderr, "ERROR: intvec data pointer is null in increment_value_in_pairvec_by_key\n");
         exit(1);
     }
@@ -465,7 +469,8 @@ int main(int argc, char *argv[])
         int num_most_frequent = atoi(argv[3]);
         run_random_inputs_test(num_data_points, max_value, num_most_frequent);
     }
-    else {
+    else
+    {
         // Run the program with some canned data.
 
         int nums1[] = {1,1,1,2,2,3};
