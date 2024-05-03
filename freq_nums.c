@@ -49,13 +49,13 @@ int get_env_var_as_int(const char *name, int default_value)
 
 
 // Allocate and initialize a ndw pair_vec_t
-pairvec_t * new_pairvec(int initialSize, int block)
+pairvec_t *new_pairvec(int initialSize, int block)
 {
     pairvec_t *pv;
 
     pv = malloc(sizeof(pairvec_t));
 
-    if (!pv)
+    if(!pv)
     {
         fprintf(stderr, "ERROR: Insufficient memory for pairvect_t in new_pairvec\n");
         exit(1);
@@ -78,7 +78,7 @@ pairvec_t * new_pairvec(int initialSize, int block)
 // Deallocate a pairvec_t structure.
 void free_pairvec(pairvec_t **ppv)
 {
-    if (!ppv)
+    if(!ppv)
     {
         fprintf(stderr, "ERROR: Invalid pointer passed to free_pairvec\n");
         exit(1);
@@ -112,9 +112,9 @@ void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
         exit(1);
     }
 
-    if(!pv->t) 
+    if(!pv->t)
     {
-        fprintf( stderr, "ERROR: pairvec data pointer is null in add_pair_to_pairvec\n");
+        fprintf(stderr, "ERROR: pairvec data pointer is null in add_pair_to_pairvec\n");
         exit(1);
     }
 
@@ -128,12 +128,12 @@ void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
     if(pv->len == pv->size)
     {
         const int verbosity = get_env_var_as_int("FREQ_NUMS_VERBOSITY", 0);
-        if (verbosity > 1)
+        if(verbosity > 1)
         {
             printf("Allocating %d more elements in add_pair_to_pairvec\n", pv->block);
         }
         // Allocate room for pv->block more elements in the array.
-        pair_t *p = malloc( (pv->size + pv->block) * sizeof(pair_t));
+        pair_t *p = malloc((pv->size + pv->block) * sizeof(pair_t));
         if(!p)
         {
             fprintf(stderr, "ERROR: Insufficient memory.");
@@ -149,7 +149,7 @@ void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
     pv->t[pv->len].second = value;
     pv->len += 1;
 
-    if (pv->len > 1)
+    if(pv->len > 1)
     {
         qsort(pv->t, pv->len, sizeof(pair_t), by_key);
     }
@@ -174,7 +174,7 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
 
     if(!pv->t)
     {
-        fprintf( stderr, "ERROR: pairvec data pointer is null in increment_value_in_pairvec_by_key\n");
+        fprintf(stderr, "ERROR: pairvec data pointer is null in increment_value_in_pairvec_by_key\n");
         exit(1);
     }
 
@@ -182,7 +182,7 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
 
     pair_t *pf;
 
-    if (pv->len > 0)
+    if(pv->len > 0)
     {
         pf = bsearch(kp, pv->t, pv->len, sizeof(pair_t), search_by_key);
     }
@@ -191,7 +191,7 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
         pf = 0;
     }
 
-    if (pf)
+    if(pf)
     {
         pf->second = pf->second + 1;
         return pf->second;
@@ -222,7 +222,7 @@ void sort_pairvec_by_value(pairvec_t *pv)
         exit(1);
     }
 
-    if (!pv->t)
+    if(!pv->t)
     {
         fprintf(stderr, "ERROR: invalid data pointer in pairvec passed to sort_pairvec_by_value");
         exit(1);
@@ -233,7 +233,7 @@ void sort_pairvec_by_value(pairvec_t *pv)
 
 
 // Allocate and initialize a new integer vector.
-intvec_t * new_intvec(int initialSize, int block)
+intvec_t *new_intvec(int initialSize, int block)
 {
     intvec_t *pv = malloc(sizeof(intvec_t));
 
@@ -268,7 +268,7 @@ void add_int_to_intvec(intvec_t *pv, int value)
 
     if(!pv->p)
     {
-        fprintf( stderr, "ERROR: intvec data pointer is null in increment_value_in_pairvec_by_key\n");
+        fprintf(stderr, "ERROR: intvec data pointer is null in increment_value_in_pairvec_by_key\n");
         exit(1);
     }
 
@@ -282,7 +282,7 @@ void add_int_to_intvec(intvec_t *pv, int value)
     if(pv->len == pv->size)
     {
         // Allocate room for pv->block more elements.
-        int *p = malloc( (pv->size + pv->block) * sizeof(int));
+        int *p = malloc((pv->size + pv->block) * sizeof(int));
         if(!p)
         {
             fprintf(stderr, "ERROR: Insufficient memory.");
@@ -302,7 +302,7 @@ void add_int_to_intvec(intvec_t *pv, int value)
 // Deallocate an integer vector.
 void free_intvec(intvec_t **ppv)
 {
-    if (!ppv)
+    if(!ppv)
     {
         fprintf(stderr, "ERROR: Invalid pointer passed to free_intvec\n");
         exit(1);
@@ -339,7 +339,7 @@ void print_int_array(const char *title, int *nums, int n)
     printf("%s[ ", title);
     for(int i = 0; i < n; i++)
     {
-        if (i > 0)
+        if(i > 0)
         {
             printf(", ");
         }
@@ -390,7 +390,7 @@ void print_intvec(const char *title, const intvec_t *piv)
 
 
 // This is where we actually do the work of find the most frequent numbers.
-intvec_t * get_most_frequent_numbers(int *nums, int n, int k)
+intvec_t *get_most_frequent_numbers(int *nums, int n, int k)
 {
     const int size = n / 4 > 0 ? n / 4 : 250;
     const int block = 250;
@@ -428,7 +428,6 @@ void run_test(int *nums, int n, int k)
 
     r = get_most_frequent_numbers(nums, n, k);
 
-
     printf("\n");
     printf("     n: %d\n", n);
     print_int_array("  nums: ", nums, n);
@@ -449,6 +448,7 @@ void run_random_inputs_test(int num_data_points, int max_value, int num_most_fre
     {
         nums[i] = rand() % max_value;
     }
+
     run_test(nums, num_data_points, num_most_frequent);
     free(nums);
 }
@@ -458,7 +458,7 @@ void run_random_inputs_test(int num_data_points, int max_value, int num_most_fre
 // Entry point.
 int main(int argc, char *argv[])
 {
-    if (argc > 3)
+    if(argc > 3)
     {
         // Run the program with user supplied inputs.
         // They specify the number of data points, the max integer value
@@ -488,7 +488,7 @@ int main(int argc, char *argv[])
         int k3 = 4;
         run_test(nums3, n3, k3);
     }
-   
+
     printf("\n");
 
     return 0;
