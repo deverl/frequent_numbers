@@ -1,0 +1,12 @@
+--style=allman
+--add-braces
+--indent=spaces=4
+# --add-brackets
+--convert-tabs
+--lineend=linux
+--unpad-paren
+--indent-col1-comments
+--preserve-date
+--align-pointer=name
+--align-reference=type
+--suffix=none

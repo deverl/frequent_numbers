@@ -1,0 +1,6 @@
+#!/bin/bash
+
+astyle --options=res/c.astyle    freq_nums.c
+astyle --options=res/c.astyle    FrequentNumbers.cpp
+astyle --options=res/java.astyle FrequentNumbers.java
+

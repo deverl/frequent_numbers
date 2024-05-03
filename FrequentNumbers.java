@@ -12,7 +12,7 @@ public class FrequentNumbers {
         }
 
         // Create a list from elements of the map
-        List<Map.Entry<Integer, Integer> > list = new ArrayList<Map.Entry<Integer, Integer> >(m.entrySet());
+        List<Map.Entry<Integer, Integer> > list = new ArrayList<Map.Entry<Integer, Integer> > (m.entrySet());
 
         // Sort the list
         Collections.sort(
@@ -22,13 +22,13 @@ public class FrequentNumbers {
                     return o2.getValue() - o1.getValue();
                 }
         });
-    
+
         List<Integer> l = new ArrayList<Integer>();
 
         for (int i = 0; i < k; i++) {
             l.add(list.get(i).getKey());
         }
-        
+
         return l;
     }
 
