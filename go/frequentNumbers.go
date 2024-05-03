@@ -69,12 +69,12 @@ func printIntSlice(title string, arr []int) {
 func runTest(nums []int, k int) {
 	result := getMostFrequentNumbers(nums, k)
 	fmt.Println("")
-	fmt.Println("     n =", len(nums))
+	fmt.Println("     n:", len(nums))
 	// fmt.Println("  nums =", nums)
-	printIntSlice("  nums =", nums)
-	fmt.Println("     k =", k)
+	printIntSlice("  nums:", nums)
+	fmt.Println("     k:", k)
 	// fmt.Println("result =", result)
-	printIntSlice("result =", result)
+	printIntSlice("result:", result)
 }
 
 func runRandomDataTest(numDataPoints int, maxValue int, numMostFrequent int) {

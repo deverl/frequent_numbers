@@ -62,10 +62,10 @@ def printArray(title, arr):
 def runTest(nums, k):
     print()
     ret = getMostFrequentNumbers(nums, k)
-    print("     n =", len(nums))
-    printArray(" input = ", nums)
-    print("     k =", k)
-    printArray("result = ", ret)
+    print("     n:", len(nums))
+    printArray("  nums: ", nums)
+    print("     k:", k)
+    printArray("result: ", ret)
 
 
 
