@@ -20,7 +20,7 @@ freqgo: go/frequentNumbers.go makefile
 
 freqjava : FrequentNumbers.jar
 	@echo '#!/bin/bash' > freqjava
-	@echo 'java -jar FrequentNumbers.jar "$@"' >> freqjava
+	@echo 'java -jar FrequentNumbers.jar' >> freqjava
 	@chmod a+x freqjava
 
 FrequentNumbers.jar: FrequentNumbers.java makefile
