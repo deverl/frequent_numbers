@@ -20,7 +20,7 @@ freqgo: go/frequentNumbers.go makefile
 
 freqjava : FrequentNumbers.jar
 	@echo '#!/bin/bash' > freqjava
-	@echo 'java -jar FrequentNumbers.jar' >> freqjava
+	@echo 'java -jar FrequentNumbers.jar "$$@"' >> freqjava
 	@chmod a+x freqjava
 
 FrequentNumbers.jar: FrequentNumbers.java makefile
@@ -29,6 +29,13 @@ FrequentNumbers.jar: FrequentNumbers.java makefile
 	jar cmfv MainClass.txt FrequentNumbers.jar *.class
 	rm -f MainClass.txt *.class
 
+freqkt.jar: frequentNumbers.kt makefile
+	kotlinc frequentNumbers.kt -include-runtime  -d freqkt.jar
+
+freqkt: freqkt.jar
+	@echo '#!/bin/bash' > freqkt
+	@echo 'java -jar freqkt.jar "$$@"' >> freqkt
+	@chmod a+x freqkt
 
 runall: runc runcpp rungo runjava runjs runlua runphp runpy
 
@@ -49,6 +56,8 @@ rungo: freqgo makefile
 runjava: freqjava
 	./freqjava
 
+runkt: freqkt
+	./freqkt
 
 runlua:
 	lua frequentNumbers.lua
@@ -71,6 +80,6 @@ runphp:
 
 
 clean:
-	rm -rf freq_nums freqc freqcpp freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava
+	rm -rf freq_nums freqc freqcpp freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava freqkt freqkt.jar
 
 
