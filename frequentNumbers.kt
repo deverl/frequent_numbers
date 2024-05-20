@@ -59,11 +59,15 @@ fun generateRandomList(numCount: Int, numValues: Int) : List<Int> {
     return l
 }
 
+fun sanitizedIntFromString(s: String): Int {
+    return s.replace("_", "").replace(",", "").toInt()
+}
+
 fun main(args: Array<String>) {
     if (args.size > 2) {
-        val numCount = args[0].replace("_", "").toInt()
-        val numValues = args[1].replace("_", "").toInt()
-        val numMostFrequent = args[2].replace("_", "").toInt();
+        val numCount = sanitizedIntFromString(args[0])
+        val numValues = sanitizedIntFromString(args[1])
+        val numMostFrequent = sanitizedIntFromString(args[2])
         val numbers = generateRandomList(numCount, numValues)
         runTest(numbers, numMostFrequent)
         println()

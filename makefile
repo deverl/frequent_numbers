@@ -59,9 +59,11 @@ runjava: freqjava
 runkt: freqkt
 	./freqkt
 
+runktbig: freqkt
+	./freqkt 10_000_000 1_000 20
+
 runlua:
 	lua frequentNumbers.lua
-
 
 runpython:
 	python3 frequentNumbers.py
