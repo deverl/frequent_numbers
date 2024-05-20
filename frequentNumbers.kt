@@ -63,14 +63,22 @@ fun sanitizedIntFromString(s: String): Int {
     return s.replace("_", "").replace(",", "").toInt()
 }
 
-fun main(args: Array<String>) {
-    if (args.size > 2) {
+
+fun runRandomTest(args: Array<String>) {
+    if (args.size > 2) { // Probably don't need to check here.
         val numCount = sanitizedIntFromString(args[0])
         val numValues = sanitizedIntFromString(args[1])
         val numMostFrequent = sanitizedIntFromString(args[2])
         val numbers = generateRandomList(numCount, numValues)
         runTest(numbers, numMostFrequent)
         println()
+    }
+}
+
+
+fun main(args: Array<String>) {
+    if (args.size > 2) {
+        runRandomTest(args)
    } else {
         runAllTests()
     }
