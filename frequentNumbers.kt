@@ -1,5 +1,3 @@
-package collections
-
 
 fun getMostFrequentNumbers(numbers: List<Int>, k: Int) : List<Int> {
     var ret = arrayListOf<Int>()
