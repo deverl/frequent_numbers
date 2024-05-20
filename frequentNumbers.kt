@@ -61,9 +61,9 @@ fun generateRandomList(numCount: Int, numValues: Int) : List<Int> {
 
 fun main(args: Array<String>) {
     if (args.size > 2) {
-        val numCount = args[0].toInt()
-        val numValues = args[1].toInt()
-        val numMostFrequent = args[2].toInt();
+        val numCount = args[0].replace("_", "").toInt()
+        val numValues = args[1].replace("_", "").toInt()
+        val numMostFrequent = args[2].replace("_", "").toInt();
         val numbers = generateRandomList(numCount, numValues)
         runTest(numbers, numMostFrequent)
         println()
