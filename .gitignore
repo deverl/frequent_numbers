@@ -11,3 +11,5 @@ freqgo
 freqjava
 freqkt
 *.jar
+rust/target
+
