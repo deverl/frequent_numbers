@@ -2,6 +2,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <cstring>
 
 using namespace std;
 
@@ -110,6 +111,26 @@ void run_random_inputs_test(int num_data_points, int max_value, int num_most_fre
 
 
 
+int int_from_string(const char *str)
+{
+    int len(strlen(str));
+    char *sanitized = new char[len];
+    memset(sanitized, 0, len);
+    int i(0);
+    for (const char *p = str; *p; p++)
+    {
+        if (*p >= '0' && *p <= '9')
+        {
+            sanitized[i] = *p;
+            i++;
+            sanitized[i] = 0;
+        }
+    }
+    int ret = atoi(sanitized);
+    delete[] sanitized;
+    return ret;
+}
+
 int main(int argc, char *argv[])
 {
     if(argc > 3)
@@ -117,9 +138,9 @@ int main(int argc, char *argv[])
         // Run the program with user supplied inputs.
         // They specify the number of data points, the max integer value
         // of a data point, and the number of results to return.
-        int num_data_points = atoi(argv[1]);
-        int max_value = atoi(argv[2]);
-        int num_most_frequent = atoi(argv[3]);
+        int num_data_points = int_from_string(argv[1]);
+        int max_value = int_from_string(argv[2]);
+        int num_most_frequent = int_from_string(argv[3]);
         run_random_inputs_test(num_data_points, max_value, num_most_frequent);
     }
     else
