@@ -10,7 +10,7 @@ freqc : freq_nums.c makefile
 
 
 freqcpp : frequentNumbers.cpp makefile
-	g++ -Wall -pedantic -O3 -std=c++11 -o freqcpp frequentNumbers.cpp
+	g++ -Wall -pedantic -O3 -std=c++20 -o freqcpp frequentNumbers.cpp
 	strip freqcpp
 
 
