@@ -23,6 +23,10 @@ freqjava : FrequentNumbers.jar
 	@echo 'java -jar FrequentNumbers.jar "$$@"' >> freqjava
 	@chmod a+x freqjava
 
+
+freqrust : rust/src/main.rs
+	cd rust ; cargo build --release ; cp target/release/freq_nums ../freqrust
+
 FrequentNumbers.jar: FrequentNumbers.java makefile
 	javac FrequentNumbers.java
 	echo "Main-Class: FrequentNumbers" > MainClass.txt
@@ -48,6 +52,8 @@ runc: freqc makefile
 runcpp: freqcpp makefile
 	./freqcpp
 
+runrust: freqrust makefile
+	./freqrust
 
 rungo: freqgo makefile
 	./freqgo
@@ -82,6 +88,6 @@ runphp:
 
 
 clean:
-	rm -rf freq_nums freqc freqcpp freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava freqkt freqkt.jar
+	rm -rf freq_nums freqc freqcpp freqrust freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava freqkt freqkt.jar rust/target
 
 
