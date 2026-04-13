@@ -41,7 +41,7 @@ freqkt: freqkt.jar
 	@echo 'java -jar freqkt.jar "$$@"' >> freqkt
 	@chmod a+x freqkt
 
-runall: runc runcpp rungo runjava runjs runlua runphp runpy
+runall: runc runcpp rungo runjava runjs runlua runphp runpy runkt runjava
 
 
 
