@@ -19,7 +19,7 @@ freqgo: go/frequentNumbers.go makefile
 
 
 freqjava : FrequentNumbers.jar
-	@echo '#!/bin/bash' > freqjava
+	@echo '#/usr/bin/env bash' > freqjava
 	@echo 'java -jar FrequentNumbers.jar "$$@"' >> freqjava
 	@chmod a+x freqjava
 
@@ -37,7 +37,7 @@ freqkt.jar: frequentNumbers.kt makefile
 	kotlinc frequentNumbers.kt -include-runtime  -d freqkt.jar
 
 freqkt: freqkt.jar
-	@echo '#!/bin/bash' > freqkt
+	@echo '#/usr/bin/env bash' > freqkt
 	@echo 'java -jar freqkt.jar "$$@"' >> freqkt
 	@chmod a+x freqkt
 
