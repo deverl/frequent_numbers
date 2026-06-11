@@ -13,4 +13,5 @@ freqkt
 freqrust
 *.jar
 rust/target
+freq_mod.mod
 

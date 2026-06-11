@@ -88,6 +88,6 @@ runphp:
 
 
 clean:
-	rm -rf freq_nums freqc freqcpp freqrust freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava freqkt freqkt.jar rust/target
+	rm -rf freq_nums freqc freqcpp freqrust freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava freqkt freqkt.jar rust/target freq_mod.mod 
 
 
