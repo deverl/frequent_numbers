@@ -48,7 +48,7 @@ int get_env_var_as_int(const char *name, int default_value)
 }
 
 
-// Allocate and initialize a ndw pair_vec_t
+// Allocate and initialize a new pairvec_t
 pairvec_t *new_pairvec(int initialSize, int block)
 {
     pairvec_t *pv;
@@ -86,29 +86,24 @@ void free_pairvec(pairvec_t **ppv)
 
     pairvec_t *pv = *ppv;
 
-    if(pv->t)
+    if(pv)
     {
         free(pv->t);
+        free(pv);
     }
 
-    free(*ppv);
+    // Null out the caller's pointer so it can't be used after free.
+    *ppv = 0;
 }
 
 
 
-int by_key(const void *a, const void *b)
-{
-    const pair_t *p1 = (const pair_t *)a;
-    const pair_t *p2 = (const pair_t *)b;
-    return p1->first - p2->first;
-}
-
-// Add a new pair_t to the pairvec_t vector.
+// Add a new pair_t to the pairvec_t vector, keeping the vector sorted by key.
 void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
 {
     if(!pv)
     {
-        fprintf(stderr, "ERROR: invalid pairvec_t pointer passed to add_pair_to_pairvec");
+        fprintf(stderr, "ERROR: invalid pairvec_t pointer passed to add_pair_to_pairvec\n");
         exit(1);
     }
 
@@ -127,39 +122,56 @@ void add_pair_to_pairvec(pairvec_t *pv, int key, int value)
 
     if(pv->len == pv->size)
     {
+        // Grow geometrically (at least doubling) so that repeated appends
+        // cost amortized O(1) copies instead of O(n) per block.
+        int new_size = pv->size > pv->block ? pv->size * 2 : pv->size + pv->block;
+
         const int verbosity = get_env_var_as_int("FREQ_NUMS_VERBOSITY", 0);
         if(verbosity > 1)
         {
-            printf("Allocating %d more elements in add_pair_to_pairvec\n", pv->block);
+            printf("Growing pairvec from %d to %d elements in add_pair_to_pairvec\n",
+                   pv->size, new_size);
         }
-        // Allocate room for pv->block more elements in the array.
-        pair_t *p = malloc((pv->size + pv->block) * sizeof(pair_t));
+
+        pair_t *p = realloc(pv->t, new_size * sizeof(pair_t));
         if(!p)
         {
-            fprintf(stderr, "ERROR: Insufficient memory.");
+            fprintf(stderr, "ERROR: Insufficient memory in add_pair_to_pairvec\n");
             exit(1);
         }
-        pv->size += pv->block;
-        memcpy(p, pv->t, (pv->len * sizeof(pair_t)));
-        free(pv->t);
+        pv->size = new_size;
         pv->t = p;
     }
 
-    pv->t[pv->len].first = key;
-    pv->t[pv->len].second = value;
-    pv->len += 1;
-
-    if(pv->len > 1)
+    // Binary search for the insertion point that keeps the vector sorted by key.
+    int lo = 0;
+    int hi = pv->len;
+    while(lo < hi)
     {
-        qsort(pv->t, pv->len, sizeof(pair_t), by_key);
+        int mid = lo + (hi - lo) / 2;
+        if(pv->t[mid].first < key)
+        {
+            lo = mid + 1;
+        }
+        else
+        {
+            hi = mid;
+        }
     }
+
+    // Shift the tail up by one slot and insert.
+    memmove(&pv->t[lo + 1], &pv->t[lo], (pv->len - lo) * sizeof(pair_t));
+    pv->t[lo].first = key;
+    pv->t[lo].second = value;
+    pv->len += 1;
 }
 
 int search_by_key(const void *a, const void *b)
 {
-    int key = *((int *)a);
+    int key = *((const int *)a);
     const pair_t *p = (const pair_t *)b;
-    return key - p->first;
+    // Return the sign of (key - p->first) without risking integer overflow.
+    return (key > p->first) - (key < p->first);
 }
 
 // Increment the value of an elemnt in the pair vector by key.
@@ -178,18 +190,7 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
         exit(1);
     }
 
-    int *kp = (int *)&key;
-
-    pair_t *pf;
-
-    if(pv->len > 0)
-    {
-        pf = bsearch(kp, pv->t, pv->len, sizeof(pair_t), search_by_key);
-    }
-    else
-    {
-        pf = 0;
-    }
+    pair_t *pf = bsearch(&key, pv->t, pv->len, sizeof(pair_t), search_by_key);
 
     if(pf)
     {
@@ -204,12 +205,13 @@ int increment_value_in_pairvec_by_key(pairvec_t *pv, int key)
 
 
 // Comparison function for the qsort call in sort_pairvec_by_value function.
+// Sorts in descending order of value (second).
 int by_value(const void *a, const void *b)
 {
-    pair_t *t1 = (pair_t *) a;
-    pair_t *t2 = (pair_t *) b;
+    const pair_t *t1 = (const pair_t *) a;
+    const pair_t *t2 = (const pair_t *) b;
 
-    return t2->second - t1->second;
+    return (t2->second > t1->second) - (t2->second < t1->second);
 }
 
 
@@ -246,7 +248,7 @@ intvec_t *new_intvec(int initialSize, int block)
     pv->p = malloc(initialSize * sizeof(int));
     if(!pv->p)
     {
-        fprintf(stderr, "ERROR: Insufficient memory for data in new_intvec\n.");
+        fprintf(stderr, "ERROR: Insufficient memory for data in new_intvec\n");
         exit(1);
     }
     pv->len = 0;
@@ -268,7 +270,7 @@ void add_int_to_intvec(intvec_t *pv, int value)
 
     if(!pv->p)
     {
-        fprintf(stderr, "ERROR: intvec data pointer is null in increment_value_in_pairvec_by_key\n");
+        fprintf(stderr, "ERROR: intvec data pointer is null in add_int_to_intvec\n");
         exit(1);
     }
 
@@ -281,16 +283,15 @@ void add_int_to_intvec(intvec_t *pv, int value)
 
     if(pv->len == pv->size)
     {
-        // Allocate room for pv->block more elements.
-        int *p = malloc((pv->size + pv->block) * sizeof(int));
+        // Grow geometrically for amortized O(1) appends.
+        int new_size = pv->size > pv->block ? pv->size * 2 : pv->size + pv->block;
+        int *p = realloc(pv->p, new_size * sizeof(int));
         if(!p)
         {
-            fprintf(stderr, "ERROR: Insufficient memory.");
+            fprintf(stderr, "ERROR: Insufficient memory in add_int_to_intvec\n");
             exit(1);
         }
-        pv->size += pv->block;
-        memcpy(p, pv->p, (pv->len * sizeof(int)));
-        free(pv->p);
+        pv->size = new_size;
         pv->p = p;
     }
 
@@ -310,17 +311,19 @@ void free_intvec(intvec_t **ppv)
 
     intvec_t *pv = *ppv;
 
-    if(pv->p)
+    if(pv)
     {
         free(pv->p);
+        free(pv);
     }
 
-    free(*ppv);
+    // Null out the caller's pointer so it can't be used after free.
+    *ppv = 0;
 }
 
 
 // Print the contents of an integer array.
-void print_int_array(const char *title, int *nums, int n)
+void print_int_array(const char *title, const int *nums, int n)
 {
     if(!title)
     {
@@ -389,8 +392,8 @@ void print_intvec(const char *title, const intvec_t *piv)
 }
 
 
-// This is where we actually do the work of find the most frequent numbers.
-intvec_t *get_most_frequent_numbers(int *nums, int n, int k)
+// This is where we actually do the work of finding the most frequent numbers.
+intvec_t *get_most_frequent_numbers(const int *nums, int n, int k)
 {
     const int size = n / 4 > 0 ? n / 4 : 250;
     const int block = 250;
@@ -406,13 +409,18 @@ intvec_t *get_most_frequent_numbers(int *nums, int n, int k)
     // Sort the pairvec by number of occurrences.
     sort_pairvec_by_value(pv);
 
-    result = new_intvec(k, k);
+    // There may be fewer than k distinct values; don't read past the end.
+    if(k > pv->len)
+    {
+        k = pv->len;
+    }
+
+    result = new_intvec(k > 0 ? k : 1, k > 0 ? k : 1);
 
     // Copy the top k most frequent numbers from the pair vector into an int vector.
     for(int i = 0; i < k; i++)
     {
-        result->p[i] = pv->t[i].first;
-        result->len++;
+        add_int_to_intvec(result, pv->t[i].first);
     }
 
     // We're done with the pair vector, so we can free it now.
@@ -422,7 +430,7 @@ intvec_t *get_most_frequent_numbers(int *nums, int n, int k)
 }
 
 
-void run_test(int *nums, int n, int k)
+void run_test(const int *nums, int n, int k)
 {
     intvec_t *r;
 
@@ -443,6 +451,11 @@ void run_test(int *nums, int n, int k)
 void run_random_inputs_test(int num_data_points, int max_value, int num_most_frequent)
 {
     int *nums = malloc(num_data_points * sizeof(int));
+    if(!nums)
+    {
+        fprintf(stderr, "ERROR: Insufficient memory in run_random_inputs_test\n");
+        exit(1);
+    }
     srand(time(0));
     for(int i = 0; i < num_data_points; i++)
     {
@@ -467,6 +480,14 @@ int main(int argc, char *argv[])
         int num_data_points = atoi(argv[1]);
         int max_value = atoi(argv[2]);
         int num_most_frequent = atoi(argv[3]);
+
+        if(num_data_points <= 0 || max_value <= 0 || num_most_frequent <= 0)
+        {
+            fprintf(stderr, "Usage: %s <num_data_points> <max_value> <num_most_frequent>\n"
+                            "All arguments must be positive integers.\n", argv[0]);
+            return 1;
+        }
+
         run_random_inputs_test(num_data_points, max_value, num_most_frequent);
     }
     else

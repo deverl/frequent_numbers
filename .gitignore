@@ -11,6 +11,7 @@ freqgo
 freqjava
 freqkt
 freqrust
+freqfortran
 *.jar
 rust/target
 freq_mod.mod
