@@ -1,7 +1,10 @@
 
+# Fortran is optional: only build and run it if the flang compiler is available.
+FLANG := $(shell command -v flang 2>/dev/null)
+
 all : freqc freqcpp freqgo FrequentNumbers.jar
 
-.PHONY : clean runlua runpython runpy runjavascript runjs runphp rungo
+.PHONY : clean runlua runpython runpy runjavascript runjs runphp rungo runfortran
 
 
 freqc : freq_nums.c makefile
@@ -27,6 +30,10 @@ freqjava : FrequentNumbers.jar
 freqrust : rust/src/main.rs
 	cd rust ; cargo build --release ; cp target/release/freq_nums ../freqrust
 
+
+freqfortran : FrequentNumbers.f90 makefile
+	flang -O2 -o freqfortran FrequentNumbers.f90
+
 FrequentNumbers.jar: FrequentNumbers.java makefile
 	javac FrequentNumbers.java
 	echo "Main-Class: FrequentNumbers" > MainClass.txt
@@ -41,7 +48,7 @@ freqkt: freqkt.jar
 	@echo 'java -jar freqkt.jar "$$@"' >> freqkt
 	@chmod a+x freqkt
 
-runall: runc runcpp rungo runjava runjs runlua runphp runpy runkt runjava runrust
+runall: runc runcpp rungo runjava runjs runlua runphp runpy runkt runjava runrust runfortran
 
 
 
@@ -54,6 +61,14 @@ runcpp: freqcpp makefile
 
 runrust: freqrust makefile
 	./freqrust
+
+ifneq ($(FLANG),)
+runfortran: freqfortran makefile
+	./freqfortran
+else
+runfortran:
+	@echo "flang not found; skipping the Fortran version."
+endif
 
 rungo: freqgo makefile
 	./freqgo
@@ -88,6 +103,6 @@ runphp:
 
 
 clean:
-	rm -rf freq_nums freqc freqcpp freqrust freqgo *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava freqkt freqkt.jar rust/target freq_mod.mod 
+	rm -rf freq_nums freqc freqcpp freqrust freqgo freqfortran *.jar MainClass.txt *.class *.tmp.html a.out *.dSYM freqjava freqkt freqkt.jar rust/target freq_mod.mod 
 
 
