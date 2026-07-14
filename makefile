@@ -29,10 +29,12 @@ freqjava : FrequentNumbers.jar
 
 freqrust : rust/src/main.rs
 	cd rust ; cargo build --release ; cp target/release/freq_nums ../freqrust
+	strip freqrust
 
 
 freqfortran : FrequentNumbers.f90 makefile
 	flang -O2 -o freqfortran FrequentNumbers.f90
+	strip freqfortran
 
 FrequentNumbers.jar: FrequentNumbers.java makefile
 	javac FrequentNumbers.java
