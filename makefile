@@ -2,18 +2,22 @@
 # Fortran is optional: only build and run it if the flang compiler is available.
 FLANG := $(shell command -v flang 2>/dev/null)
 
+CC := clang
+
+CPP := clang++
+
 all : freqc freqcpp freqgo FrequentNumbers.jar
 
 .PHONY : clean runlua runpython runpy runjavascript runjs runphp rungo runfortran
 
 
 freqc : freq_nums.c makefile
-	gcc -Wall -pedantic -O3 -o freqc freq_nums.c
+	$(CC) -Wall -pedantic -O3 -o freqc freq_nums.c
 	strip freqc
 
 
 freqcpp : frequentNumbers.cpp makefile
-	g++ -Wall -pedantic -O3 -std=c++20 -o freqcpp frequentNumbers.cpp
+	$(CPP) -Wall -pedantic -O3 -std=c++20 -o freqcpp frequentNumbers.cpp
 	strip freqcpp
 
 
